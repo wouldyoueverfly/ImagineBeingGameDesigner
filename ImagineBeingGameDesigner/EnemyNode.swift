@@ -10,7 +10,7 @@ import SpriteKit
 class EnemyNode: SKSpriteNode {
     let type: EnemyType
     var lastFireTime: Double = 0
-    let shields: Int
+    var shields: Int
     
     init(type: EnemyType, startPosition: CGPoint, xOffset: CGFloat, moveStraight: Bool) {
         self.type = type
