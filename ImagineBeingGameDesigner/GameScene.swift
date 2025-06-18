@@ -34,7 +34,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         
         if let particles = SKEmitterNode(fileNamed: "Starfield") {
-            particles.position = CGPoint(x: 1080.0, y: 0.0)
+            particles.position = CGPoint(x: 2600, y: 0)
             particles.advanceSimulationTime(60)
             particles.zPosition = -1
             addChild(particles)
@@ -107,8 +107,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let maximumEnemyType = min(enemyTypes.count, levelNumber + 1)
         let enemyType = Int.random(in: 0..<maximumEnemyType)
         
-        let enemyOffsetX: CGFloat = 100
-        let enemyStartX = 600
+        let enemyOffsetX: CGFloat = 150
+        let enemyStartX = 1500
         
         if currentWave.enemies.isEmpty {
             for (index, position) in positions.shuffled().enumerated() {
