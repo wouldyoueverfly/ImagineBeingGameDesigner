@@ -6,6 +6,7 @@
 //
 
 import SpriteKit
+import CoreMotion
 
 enum CollisionType: UInt32 {
     case player = 1
@@ -15,7 +16,7 @@ enum CollisionType: UInt32 {
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    
+    let motionManager = CMMotionManager()
     let player = SKSpriteNode(imageNamed: "player")
     
     let waves = Bundle.main.decode([Wave].self, from: "waves.json")
@@ -49,9 +50,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody?.collisionBitMask = CollisionType.enemy.rawValue | CollisionType.enemyWeapon.rawValue
         player.physicsBody?.contactTestBitMask = CollisionType.enemy.rawValue | CollisionType.enemyWeapon.rawValue
         player.physicsBody?.isDynamic = false
+        
+        motionManager.startAccelerometerUpdates()
     }
     
     override func update(_ currentTime: TimeInterval) {
+        if let accelerometerData = motionManager.accelerometerData {
+            player.position.y += CGFloat(accelerometerData.acceleration.x * 50)
+            
+            if player.position.y < frame.minY {
+                player.position.y = frame.minY
+            } else if player.position.y > frame.maxY {
+                player.position.y = frame.maxY
+            }
+        }
+        
         for child in children  {
             if child.frame.maxX < 0 {
                 if !frame.intersects(child.frame) {
@@ -147,7 +160,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             playerShields -= 1
             
             if playerShields == 0 {
-                // gameOver()
+                 gameOver()
                 secondNode.removeFromParent()
             }
             
